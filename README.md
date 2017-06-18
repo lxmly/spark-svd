@@ -1,10 +1,11 @@
 # spark-svd
 SVD算法的Spark实现，基于Graphx，其中
-$$
-\hat r_{ui} = \mu + b_i + b _u+q_{i}^Tp_{u}
-$$
 
-##迭代RMSE
+```math
+\hat r_{ui} = \mu + b_i + b_u+q_{i}^Tp_{u}
+```
+
+## 迭代RMSE
 this iteration rmse:1.003708326375869
 this iteration rmse:1.0024169690529803
 this iteration rmse:1.0012764674298373
