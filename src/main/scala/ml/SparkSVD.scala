@@ -18,10 +18,10 @@ object SparkSVD extends Logging{
     * @param maxIters 迭代次数
     * @param minVal 预测下限
     * @param maxVal 预测上限
-    * @param gamma1 p、q学习速率
-    * @param gamma2 b_*学习速率
-    * @param lambda1 p、q正则系数
-    * @param lambda2 b_*正则系数
+    * @param gamma1 b_*学习速率
+    * @param gamma2 p、q学习速率
+    * @param lambda1 b_*正则系数
+    * @param lambda2 p、q正则系数
     * @param verbose 是否输出RMSE
     */
   class Conf(
@@ -130,7 +130,7 @@ object SparkSVD extends Logging{
         (ctx.attr - pred) * (ctx.attr - pred)
       }.reduce(_ + _) / g.edges.count())
 
-      logInfo(s"this iteration rmse:$rmse")
+      println(s"this iteration rmse:$rmse")
     }
 
     g.unpersist()
