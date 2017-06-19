@@ -12,11 +12,11 @@ import org.apache.spark.graphx.Edge
 object SparkSVDExample {
 
   private class Encoder(maxId: Int) {
-    private[this] final val numBits =
+    private final val numBits =
       math.min(java.lang.Integer.numberOfLeadingZeros(maxId), 31)
-    private[this] final val usrBit = 1 << numBits
-    private[this] final val itmBit = 2 << numBits
-    private[this] final val mask = (1 << numBits) - 1
+    private final val usrBit = 1 << numBits
+    private final val itmBit = 2 << numBits
+    private final val mask = (1 << numBits) - 1
 
     def encode(id: Int, usr:Boolean): Int = {
       if(usr) usrBit | id else itmBit | id
