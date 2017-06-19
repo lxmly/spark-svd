@@ -31,7 +31,6 @@ object SparkSVDExample {
 
     val conf = new SparkConf().setAppName("Spark SVD Example").setMaster("local")
     val sc = new SparkContext(conf)
-    sc.setLogLevel("ERROR")
 
     val trainDataPath = "data/ml-100k/u.data"
 
