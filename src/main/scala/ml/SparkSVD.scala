@@ -130,7 +130,7 @@ object SparkSVD extends Logging{
         (ctx.attr - pred) * (ctx.attr - pred)
       }.reduce(_ + _) / g.edges.count())
 
-      println(s"this iteration rmse:$rmse")
+      logInfo(s"this iteration rmse:$rmse")
     }
 
     g.unpersist()
