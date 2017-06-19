@@ -10,7 +10,7 @@ this iteration rmse:1.0175177576090468</br>
 this iteration rmse:1.0052444790403996</br>
 this iteration rmse:0.9943990205432105</br>
 this iteration rmse:0.984820136329479</br>
-...
+...</br>
 this iteration rmse:0.936393965752616</br>
 this iteration rmse:0.9336823487527597</br>
 this iteration rmse:0.9312931666273849</br>
