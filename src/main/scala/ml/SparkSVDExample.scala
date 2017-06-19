@@ -11,20 +11,47 @@ import org.apache.spark.graphx.Edge
   */
 object SparkSVDExample {
 
+  private class Encoder(maxId: Int) {
+    private[this] final val numBits =
+      math.min(java.lang.Integer.numberOfLeadingZeros(maxId), 31)
+    private[this] final val usrBit = 1 << numBits
+    private[this] final val itmBit = 2 << numBits
+    private[this] final val mask = (1 << numBits) - 1
+
+    def encode(id: Int, usr:Boolean): Int = {
+      if(usr) usrBit | id else itmBit | id
+    }
+
+    def id(encode:Int):Int = {
+      encode & mask
+    }
+  }
+
   def main(args: Array[String]): Unit = {
 
     val conf = new SparkConf().setAppName("Spark SVD Example").setMaster("local")
     val sc = new SparkContext(conf)
+    sc.setLogLevel("ERROR")
 
     val trainDataPath = "data/ml-100k/u.data"
 
-    val edges = mutable.ArrayBuilder.make[Edge[Double]]
+    var maxId = -1
+    val ratings = mutable.ArrayBuilder.make[(Int, Int, Double)]
     for(line <- Source.fromFile(trainDataPath).getLines) {
       val Array(u, v, r, _) = line.split("\t")
-      edges += Edge(u.toLong, v.toLong, r.toDouble)
+      val usr = u.toInt
+      val itm = v.toInt
+      ratings += ((usr, itm, r.toDouble))
+      maxId = math.max(usr, math.max(maxId, itm))
     }
 
-    SparkSVD.run(sc.parallelize(edges.result()),
+    val encoder = new Encoder(maxId)
+
+    val ratingsEdges = ratings.result().map{case (u, v, r) =>
+      Edge(encoder.encode(u, true), encoder.encode(v, false), r)
+    }
+
+    SparkSVD.run(sc.parallelize(ratingsEdges),
       new SparkSVD.Conf(
         rank = 30,
         maxIters = 200,
