@@ -116,11 +116,11 @@ object SparkSVD extends Logging{
       g = gJoinT2
 
       if(conf.verbose) {
-        calculateIterationRMSE(g)
+        calculateIterationRMSE(g, i)
       }
     }
 
-    def calculateIterationRMSE(g: Graph[(Array[Double], Double), Double]): Unit = {
+    def calculateIterationRMSE(g: Graph[(Array[Double], Double), Double], i:Int): Unit = {
       val rmse = math.sqrt(g.triplets.map { ctx =>
         val (usr, itm) = (ctx.srcAttr, ctx.dstAttr)
         val (p, q) = (usr._1, itm._1)
@@ -130,7 +130,7 @@ object SparkSVD extends Logging{
         (ctx.attr - pred) * (ctx.attr - pred)
       }.reduce(_ + _) / g.edges.count())
 
-      logInfo(s"this iteration rmse:$rmse")
+      logInfo(s"the ${i}th iteration rmse:$rmse")
     }
 
     g.unpersist()
